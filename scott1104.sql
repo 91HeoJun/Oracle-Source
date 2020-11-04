@@ -66,5 +66,24 @@ SELECT * FROM emp WHERE ename >= 'F';
 -- SAL 2500 AND JOB ANALYST
 SELECT * FROM emp WHERE 25 <= 2500 AND job = 'ANALYST';
 
--- JOB MANAGER, SALESMAN, CLERK
+-- JOB MANAGER or SALESMAN or CLERK
 SELECT * FROM emp WHERE job = 'MANAGER' OR job = 'SALESMAN' OR job = 'CLERK';
+
+-- 등가연산자 : 양쪽 항목이 같은지 검사(==, !=, !)
+-- SAL !3000 사원 출력 | 하기 내용 동일 결과 ---
+SELECT * FROM emp WHERE sal != 3000;
+SELECT * FROM emp WHERE sal <> 3000;
+SELECT * FROM emp WHERE sal ^= 3000;
+---------------------------------------------
+
+-- IN 연산자
+SELECT * FROM emp WHERE job IN('MANAGER','SALESMAN','CLERK');
+SELECT * FROM emp WHERE job = 'MANAGER' OR job = 'SALESMAN' OR job = 'CLERK';
+SELECT * FROM emp WHERE deptno IN(10, 20);
+
+-- NOT IN 연산자
+SELECT * FROM emp WHERE job NOT IN('MANAGER','SALESMAN','CLERK');
+SELECT * FROM emp WHERE job != 'MANAGER' AND job != 'SALESMAN' AND job != 'CLERK';
+
+
+
