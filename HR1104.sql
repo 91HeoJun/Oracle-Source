@@ -18,7 +18,7 @@ SELECT last_name, SALARY FROM employees WHERE SALARY < 5000 OR SALARY > 12000;
 
 -------------------------------------------------------------------------------------------------------------------------------------
 
--- 실습 1 : 
+-- 실습 1 : 20번 50번 부서에서 근무하는 사원들 LAST_NAME및 부서번호 알파벳 순으로 정렬
 SELECT last_name, department_id FROM employees WHERE department_id IN(20, 50) ORDER BY FIRST_NAME ASC;
 
 -- 실습 2 : 커미션 버는 직원 LAST_NAME, SALALY,COMMITION 조회 (연봉 기준 and 커미션 및 정렬)
