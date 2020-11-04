@@ -51,3 +51,20 @@ SELECT * FROM emp WHERE empno = 7499 AND deptno = 30;
 -- OR 실습
 SELECT * FROM emp WHERE deptno = 30 OR job = 'CLERK';
 SELECT * FROM emp WHERE deptno = 20 OR job = 'SALESMAN';
+
+-- 산술연산자를 이용한 조회(+ ,-, /, *)
+SELECT * FROM emp WHERE sal*12=36000;
+
+-- 관계연산자를 이용한 조회(<, >, =)
+SELECT * FROM emp WHERE sal > 3000;
+SELECT * FROM emp WHERE sal >= 3000;
+
+-- 관계연산자(알파벳 순서)
+SELECT * FROM emp WHERE ename >= 'F';
+
+-- 논리연산자 : AND, OR
+-- SAL 2500 AND JOB ANALYST
+SELECT * FROM emp WHERE 25 <= 2500 AND job = 'ANALYST';
+
+-- JOB MANAGER, SALESMAN, CLERK
+SELECT * FROM emp WHERE job = 'MANAGER' OR job = 'SALESMAN' OR job = 'CLERK';
