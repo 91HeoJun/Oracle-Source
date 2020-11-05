@@ -73,3 +73,19 @@ SELECT DISTINCT department_id FROM employees WHERE job_id != 'ST_CLERK' AND depa
 
 -- 실습 15 : COMMISSION_PCT가 NULL 이 아닌 사원 중 COMMISSION = SALARY * COMMISSION_PCT 를 구해 EMPLOYEE_ID, FIRST_NAME, JOB_ID와 같이 조회
 SELECT employee_id, first_name, job_id, salary * commission_pct AS COMMISSION FROM employees WHERE commission_pct IS NOT null;
+
+-- 실습 16 : FIRST_NAME 이 CURTIS 인 사람의 FIRST_NAME, LAST_NAME, EMAIL,PHONE_NUMBER, JOB_ID를 조회. 결과 소문자 출력
+SELECT first_name, last_name, email, phone_number, LOWER(job_id)
+FROM employees
+WHERE first_name = 'Curtis';
+
+
+-- 실습 17 : 부서번호 70, 80, 90인 사람들의 EMPLOYEE_ID, FIRST_NAME, HIRE_DATE, JOB_ID 조회, JOB_ID가 IT_PROG인 경우 '프로그래머'로 변경 출력
+SELECT Employee_Id, First_Name, Hire_Date, REPLACE (job_id, 'IT_PROG', '프로그래머')
+FROM employees
+WHERE department_id IN(60, 70, 80, 90);
+
+-- 실습 18 : JOB_ID가 AD_PRES, PU_CLERK인 사원들의 EMPLOYEE_ID, FIRST_NAME, HIRE_DATE, JOB_ID 조회. 사원명 FIRST_NAME과 LAST_NAME을 연결 출력
+SELECT employee_id, first_name ||' '|| last_name, hire_date, job_id
+FROM employees
+WHERE job_id IN('AD_PRES', 'PU_CLERK');

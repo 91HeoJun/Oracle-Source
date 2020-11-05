@@ -168,7 +168,7 @@ SELECT empno, ename, sal, deptno FROM emp WHERE deptno IN(20, 30) AND sal > 2000
 -------------------------------------------------------------------------------------------
 
 -- 오라클 함수
--- 1. 문자 함수 : UPPER / LOWER / INITCAP / LENGTH / LENGTHB / SUBSTR / 
+-- 1. 문자 함수 : UPPER / LOWER / INITCAP / LENGTH / LENGTHB / SUBSTR / INSTR / REPLACE / CONCAT / TRIM / REVERSE
 
 -- ENAME 을 UPPER / LOWER / INITCAP 로 변환 조회
 SELECT ename, UPPER(ename), LOWER(ename), INITCAP(ename) FROM emp;
@@ -179,10 +179,41 @@ SELECT LENGTH('한글'), LENGTHB('한글') FROM DUAL;
 -- 직책 6글자 이상 사원 조회
 SELECT * FROM emp WHERE LENGTH(job) >= 6;
 
--- SUBSTR
-SELECT job, SUBSTR(job,1 ,2 ), SUBSTR(job, 3, 2), SUBSTR(job, 5) FROM emp;
+-- SUBSTR(문자열 추출)
+SELECT job, SUBSTR(job, 1, 2 ), SUBSTR(job, 3, 2), SUBSTR(job, 5) FROM emp;
+-- -LENGTH(JOB) = -5
+SELECT job, SUBSTR(job, -LENGTH(JOB)), SUBSTR(job, -LENGTH(JOB),2), SUBSTR(job, -3) FROM emp;
 
+-- INSTR (특정문자 위치 찾기)
+SELECT INSTR('HELLO, ORACLE!','L') AS INSTR_1,
+INSTR('HELLO, ORACLE!','L', 5) AS INSTR_2,
+INSTR('HELLO, ORACLE!','L', 2, 2) AS INSTR_3
+FROM DUAL;
 
+-- REPLACE(찾아서 바꾸기)
+SELECT REPLACE('이것이 Oracle이다','이것이','THIS IS')
+FROM DUAL;
 
+SELECT '010-1234-5678' AS REPLACE_BEFORE,
+REPLACE('010-1234-5678', '-', ' ') AS REPLACE_1,
+REPLACE('010-1234-5678', '-') AS REPLACE_2
+FROM DUAL;
 
+-- CONCAT(연결)
+-- empno, ename을 연결하여 조회
+SELECT CONCAT (empno, ename), CONCAT(empno, CONCAT(':',ename)) -- CONCAT은 2개까지 가능하므로 추가로 더 할 경우 CONCAT 안에 CONCAT을 생성할것
+FROM emp
+WHERE ename = 'SCOTT';
+
+-- || : 연결의 의미로 사용됨
+SELECT empno || ename, empno || ':' || ename
+FROM emp
+WHERE ename = 'SCOTT';
+
+-- TRIM(공백 제거), LTRIM(좌측 공백 제거), RTRIM(우측 공백 제거)
+SELECT '   이것이   ', TRIM('      이것이      ')
+FROM DUAL;
+
+-- REVERSE(문자열 역출력)
+SELECT REVERSE('Oracle') FROM DUAL;
 
