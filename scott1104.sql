@@ -201,7 +201,8 @@ FROM DUAL;
 
 -- CONCAT(연결)
 -- empno, ename을 연결하여 조회
-SELECT CONCAT (empno, ename), CONCAT(empno, CONCAT(':',ename)) -- CONCAT은 2개까지 가능하므로 추가로 더 할 경우 CONCAT 안에 CONCAT을 생성할것
+SELECT CONCAT (empno, ename), CONCAT(empno, CONCAT(':',ename))
+-- CONCAT은 2개까지 가능하므로 추가로 더 할 경우 CONCAT 안에 CONCAT을 생성할것
 FROM emp
 WHERE ename = 'SCOTT';
 
@@ -217,3 +218,148 @@ FROM DUAL;
 -- REVERSE(문자열 역출력)
 SELECT REVERSE('Oracle') FROM DUAL;
 
+-------------------------------------------------------------------------------------------
+
+-- 2. 숫자 함수 : ROUND(반올림) / TRUNC(버림) / CEIL(입력된 숫자와 가까운 큰 정수) / FLOOR(입력된 숫자와 가까운 작은 정수), MOD(나머지)
+
+-- ROUND(반올림)
+SELECT ROUND(1234.5678) AS ROUND,
+    ROUND(1234.5678, 0) AS ROUND_1,
+    ROUND(1234.5678, 1) AS ROUND_1,
+    ROUND(1234.5678, -1) AS ROUND_MINUS,
+    ROUND(1234.5678, -2) AS ROUND_MINUS2
+FROM DUAL;
+
+-- TRUNC(버림)
+SELECT TRUNC(1234.5678) AS TRUNC,
+TRUNC(1234.5678, 0) AS TRUNC_1,
+TRUNC(1234.5678, 1) AS TRUNC_2,
+TRUNC(1234.5678, -1) AS TRUNC_MINUS,
+TRUNC(1234.5678, -2) AS TRUNC_MINUS2
+FROM DUAL;
+
+-- CEIL / FLOOR
+SELECT CEIL(3.14), FLOOR(3.14), CEIL(-3.14), FLOOR(3.14)
+FROM DUAL;
+
+-- MOD
+SELECT MOD(15,6), MOD(10,2), MOD(11,2)
+FROM DUAL;
+
+-------------------------------------------------------------------------------------------
+-- 3. 날짜함수 : SYSDATE, CURRENT_DATE, CURRENT_TIMESTAMP, ADD_MONTHS
+
+SELECT sysdate, current_date, current_timestamp
+FROM DUAL;
+
+-- 날짜 데이터는 연산이 가능함 : 날짜 데이터 +1, -1, 날짜데이터 - 날짜데이터
+-- 날짜 데이터 + 날짜데이터는 불가
+SELECT SYSDATE AS NOW, SYSDATE - 1 AS YESTERDAY, SYSDATE + 1 AS TOMORROW
+FROM DUAL;
+
+-- ADD_MONTHS
+SELECT SYSDATE AS NOW, ADD_MONTHS (SYSDATE, 3)
+FROM DUAL;
+
+-- 입사 10주년 사원 조회
+SELECT empno, ename, hiredate, ADD_MONTHS(hiredate, 120)
+FROM emp;
+
+-- 입사 38년 미만 사원 조회
+SELECT empno, ename, hiredate
+FROM emp
+WHERE ADD_MONTHS(hiredate, 456) > SYSDATE;
+
+-- 날짜함수 : MONTHS_BETWEEN(@, @) - 두 날짜 사이의 차이
+SELECT empno, ename, hiredate
+FROM emp
+WHERE MONTHS_BETWEEN(SYSDATE, HIREDATE) < 456;
+
+SELECT empno, ename, hiredate, SYSDATE, MONTHS_BETWEEN(hiredate, SYSDATE) AS MONTHS1,
+    MONTHS_BETWEEN(SYSDATE, hiredate) AS MONTHS2,
+    TRUNC(MONTHS_BETWEEN(SYSDATE, hiredate))
+FROM emp;
+
+-- 날짜함수 : NEXT_DAY, LAST_DAY
+SELECT SYSDATE, NEXT_DAY(SYSDATE, '월요일'), LAST_DAY(SYSDATE)
+FROM DUAL;
+
+-------------------------------------------------------------------------------------------
+
+-- 4. 형변환 함수 : TO_CHAR(날짜, 숫자데이터 → 문자) / TO_NUMBER(문자데이터 → 숫자) / TO_DATE(문자데이터 → 날짜)
+
+SELECT TO_CHAR(SYSDATE, 'YYYY/MM/DD') AS 현재날짜
+FROM DUAL;
+SELECT TO_CHAR(SYSDATE, 'MM') AS 현재날짜 -- 전체 날짜를 갖고 있으나, 출력은 MM or DD로
+FROM DUAL;
+SELECT TO_CHAR(SYSDATE, 'MON') AS 현재날짜 -- 월 + 요일 출력
+FROM DUAL;
+SELECT TO_CHAR(SYSDATE, 'DAY') AS 현재날짜 -- 요일 출력
+FROM DUAL;
+SELECT TO_CHAR(SYSDATE, 'HH:MI:SS') AS 현재날짜 -- Defult는 12시간제
+FROM DUAL;
+SELECT TO_CHAR(SYSDATE, 'HH12:MI:SS') AS 현재날짜
+FROM DUAL;
+SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') AS 현재날짜 -- 24시간제 가능
+FROM DUAL;
+SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS PM') AS 현재날짜 -- 24시간제 + AM or PM 입력 시 오전, 오후 출력 가능
+FROM DUAL;
+
+-- 실습 : 오늘 날짜를 년 / 월 / 일 / 시 : 분 : 초 출력
+SELECT TO_CHAR(SYSDATE, 'YYYY/MM/SS HH:MI:SS') AS 현재날짜시간
+FROM DUAL;
+
+SELECT 1300 - TO_NUMBER('1500'), to_number('1300') + 1500
+FROM DUAL;
+
+SELECT 1,300 - '1500', '1300' + 1,500 -- 필드 구분을 ','로 하기에 TO_NUMBER로 숫자변환 후 연산하는 것이 정확함
+FROM DUAL;
+
+-- SELECT TO_NUMBER('1,300') - TO_NUMBER('1,500') FROM DUAL; <- X
+SELECT TO_NUMBER('1,300', '999,999,999') - to_number('1,500', '999,999')
+FROM DUAL;
+
+SELECT SAL, TO_CHAR(SAL, '$999,999') AS SAL_$,
+    TO_CHAR(SAL, 'L999,999') AS SAL_L,      -- L:지역화폐 통화기호
+    TO_CHAR(SAL, '$999,999') AS SAL_1,      -- $:달러 통화기호
+    TO_CHAR(SAL, '000,999,999.00') AS SAL_2,-- 앞자리를 0으로 채움 
+    TO_CHAR(SAL, '000999,999.99') AS SAL_3, -- 뒷자리를 0으로 채움
+    TO_CHAR(SAL, '999,999,00') AS SAL_4     -- 
+FROM emp;
+
+
+SELECT TO_DATE('2020-11-05', 'YYYY/MM/DD') AS TODATE1,
+    TO_DATE('20201105', 'YYYY-MM-DD') AS TODATE2
+FROM DUAL;
+
+-- 1981-06-01 이후 입사사원 정보 조회
+SELECT *
+FROM emp
+WHERE hiredate > TO_DATE('19810601', 'YYYY/MM/DD');
+
+SELECT TO_DATE('2019-12-20') - TO_DATE('2019-10-20')
+FROM DUAL;
+
+-------------------------------------------------------------------------------------------
+
+-- 5. NULL처리 함수 : NVL, NVL2
+SELECT empno, ename, sal, comm, sal+comm
+FROM emp;
+
+-- NVL 함수는 값이 null인 경우 지정값을 출력
+SELECT empno, ename, sal, comm, sal+comm, NVL(comm, 0), sal+NVL(comm, 0)
+FROM emp;
+
+-- NVL2 함수는 null이 아닌경우 지정값1을  출력하고, null인 경우 지정값2을 출력
+SELECT empno, ename, sal, comm, NVL2(comm, '0', 'X'), sal+NVL2(comm, sal*12+comm, sal*12) AS ANNSAL
+FROM emp;
+
+-------------------------------------------------------------------------------------------
+
+-- 6. DECODE함수와 CASE문 (JAVA에서의 if / else if / SWITCH&CASE 와 비슷한 기능)
+-- JOB 이 MANAGER, SALESMAN, ANALYST 인 경우 각각의 다른 비율을 적용할 경우
+SELECT empno, ename, job, sal, DECODE(job, 'MANAGER', SAL*1.1, 
+                                        'SALESMAN', SAL*1.05,
+                                        'ANALYST', SAL,
+                                        SAL*1.03) AS UPSAL
+FROM emp;
