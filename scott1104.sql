@@ -31,7 +31,7 @@ SELECT * FROM emp ORDER BY empno ASC;
 -- 하나의 열로 기준을 주어 내림차순 조회
 SELECT ename, sal FROM emp ORDER BY sal DESC;
 
--- 부서번호의 오름차순이며, 부서번호 동일 시 급여의 내림차순 조회
+-- 부서번호의 ASC(오름차순)이며, 부서번호 동일 시 급여의 DESC(내림차순) 조회
 SELECT * FROM emp ORDER BY deptno ASC, sal DESC;
 
 -- 실습 1번
@@ -74,7 +74,8 @@ SELECT * FROM emp WHERE job = 'MANAGER' OR job = 'SALESMAN' OR job = 'CLERK';
 SELECT * FROM emp WHERE sal != 3000;
 SELECT * FROM emp WHERE sal <> 3000;
 SELECT * FROM emp WHERE sal ^= 3000;
----------------------------------------------
+
+-------------------------------------------------------------------------------------------
 
 -- IN 연산자
 SELECT * FROM emp WHERE job IN('MANAGER','SALESMAN','CLERK');
@@ -84,6 +85,104 @@ SELECT * FROM emp WHERE deptno IN(10, 20);
 -- NOT IN 연산자
 SELECT * FROM emp WHERE job NOT IN('MANAGER','SALESMAN','CLERK');
 SELECT * FROM emp WHERE job != 'MANAGER' AND job != 'SALESMAN' AND job != 'CLERK';
+
+-------------------------------------------------------------------------------------------
+
+-- BETWEEN a AND b
+-- 급여 2000 이상, 3000 이하인 사원 조회
+-- 방법1 : 등가연산자를 통한 표현
+SELECT * FROM emp WHERE sal >= 2000 AND sal <= 3000;
+-- 방법2 : BETWEEN 표현
+SELECT * FROM emp WHERE sal BETWEEN 2000 AND 3000;
+
+-- 급여 2000 이상 3000 이하가 아닌 사원 조회
+-- 방법 : NOT + BETWEEN
+SELECT * FROM emp WHERE sal NOT BETWEEN 2000 AND 3000;
+
+-------------------------------------------------------------------------------------------
+
+-- LIKE 문자열 검색 사용 (S로 시작하는 @@, H로 끝나는 @@, 가운데에 T가 있으면 @@)
+-- 사원 이름 S로 시작하는 모든 사원 조회하기 ('' 내용은 대소문자 구분함)
+SELECT * FROM emp WHERE ename LIKE 'S%';
+
+-- 사원이름 두 번째 글자가 L인 사원만 조회
+SELECT * FROM emp WHERE ename LIKE '_L%';
+
+-- 사원 이름에 AM이 포함된 사원 조회
+SELECT * FROM emp WHERE ename LIKE '%AM%';
+
+-- 사원 이름에 AM이 포함되지 않은 사원 조회
+SELECT * FROM emp WHERE ename NOT LIKE '%AM%';
+
+-------------------------------------------------------------------------------------------
+
+-- IS NULL
+SELECT * FROM emp WHERE comm = null; -- 불가
+SELECT * FROM emp WHERE comm IS null; -- 가능
+
+-- mgr 이 NULL 인 사원 조회
+SELECT * FROM emp WHERE mgr IS null;
+
+-- mgr 이 NULL 이 아닌 사원 조회
+SELECT * FROM emp WHERE mgr IS NOT null;
+
+-------------------------------------------------------------------------------------------
+
+-- 집합연산자 : 합집합(UNION), 교집합(INTERSECT), 차집합(MINUS)
+
+-- 합집합(UNION) : DEPTNO가 10인 테이블과 DEPTNO가 20인 결과를 합해서 출력
+SELECT empno, ename, sal, deptno FROM emp WHERE deptno = 10
+UNION -- UNION [ALL(중복까지 전체 출력) / SELECT / WITH]
+SELECT empno, ename, sal, deptno FROM emp WHERE deptno = 20;
+
+-- 차집합(MINUS) : 부서번호가 10이 아닌 사원 조회
+SELECT empno, ename, sal, deptno FROM emp
+MINUS
+SELECT empno, ename, sal, deptno FROM emp WHERE deptno = 10;
+
+-- 교집합(INTERSECT) : 부서 번호가 10인 사원 조회
+SELECT empno, ename, sal, deptno FROM emp
+INTERSECT
+SELECT empno, ename, sal, deptno FROM emp WHERE deptno = 10;
+
+-- 20, 30번 부서번호 보유 사원 중 SAL이 2000 초과인 사원의 사번, 이름, 급여, 부서번호 출력 | SELECT문 두 가지 사용 
+-- 집합 연산자 미사용
+SELECT empno, ename, sal, deptno FROM emp WHERE deptno IN(20, 30) AND sal > 2000;
+
+-- 집합 연산자 미사용
+-- 차집합
+SELECT empno, ename, sal, deptno FROM emp WHERE sal > 2000
+MINUS
+SELECT empno, ename, sal, deptno FROM emp WHERE deptno = 10;
+
+-- 합집합
+SELECT empno, ename, sal, deptno FROM emp WHERE sal > 2000 AND deptno = 20
+UNION
+SELECT empno, ename, sal, deptno FROM emp WHERE sal > 2000 AND deptno = 30;
+
+-- 합집합 
+SELECT empno, ename, sal, deptno FROM emp
+INTERSECT
+SELECT empno, ename, sal, deptno FROM emp WHERE deptno IN(20, 30) AND sal > 2000;
+
+-------------------------------------------------------------------------------------------
+
+-- 오라클 함수
+-- 1. 문자 함수 : UPPER / LOWER / INITCAP / LENGTH / LENGTHB / SUBSTR / 
+
+-- ENAME 을 UPPER / LOWER / INITCAP 로 변환 조회
+SELECT ename, UPPER(ename), LOWER(ename), INITCAP(ename) FROM emp;
+
+-- DUAL 테이블 이용 (SYS 내장 테이블로 임시연산 혹은 함수 결과 값 확인 용도로 이용)
+SELECT LENGTH('한글'), LENGTHB('한글') FROM DUAL;
+
+-- 직책 6글자 이상 사원 조회
+SELECT * FROM emp WHERE LENGTH(job) >= 6;
+
+-- SUBSTR
+SELECT job, SUBSTR(job,1 ,2 ), SUBSTR(job, 3, 2), SUBSTR(job, 5) FROM emp;
+
+
 
 
 
