@@ -358,8 +358,27 @@ FROM emp;
 
 -- 6. DECODE함수와 CASE문 (JAVA에서의 if / else if / SWITCH&CASE 와 비슷한 기능)
 -- JOB 이 MANAGER, SALESMAN, ANALYST 인 경우 각각의 다른 비율을 적용할 경우
+
+-- DECODE
 SELECT empno, ename, job, sal, DECODE(job, 'MANAGER', SAL*1.1, 
                                         'SALESMAN', SAL*1.05,
                                         'ANALYST', SAL,
                                         SAL*1.03) AS UPSAL
+FROM emp;
+
+-- CASE
+SELECT empno, ename, job, sal, CASE job
+                                    WHEN 'MANAGER' THEN SAL*1.1
+                                    WHEN 'SALESMAN' THEN SAL*1.05
+                                    WHEN 'ANALYST' THEN SAL
+                                    ELSE SAL*1.03
+                                END AS UPSAL
+FROM emp;
+
+
+SELECT empno, ename, job, sal, CASE
+                                    WHEN comm IS NULL THEN '해당사항 없음'
+                                    WHEN comm = 0 THEN '수당 없음'
+                                    WHEN comm > 0 THEN '수당 : ' || comm
+                                END AS COMM_TEXT
 FROM emp;
