@@ -105,6 +105,45 @@ SELECT LAST_NAME, SALARY,
         WHEN SALARY BETWEEN 12000 AND 13999 THEN 0.44
         WHEN SALARY >= 14000 THEN 0.45
         END AS TAX_RATE
-        
 FROM employees
 WHERE department_id IN(80);
+
+-- 실습 <- 강사님 코드 / 디코드로 할 경우
+SELECT LAST_NAME, SALARY, 
+    DECODE(TRUNC(salary/2000,0),
+        0, 0.00,
+        1, 0.09,
+        2, 0.20,
+        3, 0.30,
+        4, 0.40,
+        5, 0.42,
+        6, 0.44,
+        0.45) AS TAX_RATE
+FROM employees
+WHERE department_id IN(80);
+
+-- 다중행 함수 연습--------------------------------------------------------------------------------------------------------------------
+
+-- 사내 최대연봉 및 최소연봉 차이 조회
+SELECT MAX(salary), MIN(salary), MAX(salary) - MIN(salary) AS RESULT
+FROM employees;
+
+-- 매니저 사원 수 조회 / MANAGER_ID가 중복된 사람이 있으므로 DISTINCT로 중복인원 제외
+SELECT COUNT(DISTINCT manager_id) AS MANAGERS
+FROM employees;
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+-- 부서별 직원 합을 구하고 부서별 오름차순 정렬
+SELECT department_id AS DEPT, COUNT(employee_id) AS COUNT
+FROM employees GROUP BY department_id
+ORDER BY department_id ASC;
+
+-- 부서별 평균연봉을 정수로만 출력하고 부서번호의 오름차순으로 정렬
+SELECT department_id AS DEPT, ROUND(AVG(salary),0) AS AVERAGE_SALARY
+FROM employees GROUP BY department_id
+ORDER BY department_id ASC;
+
+-- 동일 직업 사원 수 조회
+SELECT job_id AS JOB, COUNT(employee_id)
+FROM employees GROUP BY job_id;

@@ -390,11 +390,11 @@ SELECT empno, ename, sal, TRUNC((sal/21.5), 2) AS DAY_PAY, ROUND(((Sal/21.5)/8),
 FROM emp;
 
 -- 실습 2
-SELECT empno, ename, TO_DATE(hiredate, 'YYYY/MM/DD') AS HIREDATE, TO_DATE(NEXT_DAY(ADD_MONTHS(hiredate, 3), '월요일')) AS R_JOB,
-        CASE
-           WHEN comm IS NULL THEN 'N/A'
-           WHEN comm >= 0 THEN TO_CHAR(comm)
-           END AS COMM
+SELECT empno, ename, TO_DATE(hiredate, 'YYYY/MM/DD') AS HIREDATE, TO_DATE(NEXT_DAY(ADD_MONTHS(hiredate, 3), '월요일')) AS R_JOB, NVL(TO_CHAR(comm), 'N/A') AS COMM
+--        CASE <- 로 가능하나 성능은 떨어지는 구문 NVL로 진행. | 다양한 구문 속에서 최적화된 고성능을 뽑아내자
+--           WHEN comm IS NULL THEN 'N/A'
+--           WHEN comm >= 0 THEN TO_CHAR(comm)
+--           END AS COMM
 FROM emp;
 
  NEXT_DAY(SYSDATE, '월요일')
@@ -411,3 +411,40 @@ SELECT empno, ename, mgr,
      END AS CHG_MGR
 FROM emp;
 
+-- 실습 3 <- 강사님 코드 / 문자열로 바꿔서 추출 | 테스트 해볼 것.
+SELECT SUBSTR(TO_CHAR(mgr), 1, 2),
+    'NULL', '0000',
+    '75', '5555',
+    '76', '6666',
+    '77', '7777',
+    '78', '8888'
+    TO_CHAR(mgr) AS CHG_MGR
+FROM emp;
+
+-- HAVING : GROUP BY에 조건을 부여함.
+-- 각 부서의 직책별 평균급여가 2000 이상인 그룹 출력
+
+SELECT deptno, job, AVG(sal)
+FROM emp
+GROUP BY deptno, job
+HAVING AVG(sal) >= 2000
+ORDER BY deptno, job ASC;
+
+-------------------------------------------------------------------------------------------
+
+-- 실습1
+SELECT deptno, FLOOR(AVG(sal)) AS AVG_SAL, MAX(sal) AS MAX_SAL, MIN(sal) AS MIN_SAL, COUNT(deptno) AS CNT
+FROM emp
+GROUP BY deptno;
+
+-- 실습2
+SELECT job, COUNT(empno)
+FROM emp
+GROUP BY job
+HAVING COUNT(job) >= 3 ;
+
+-- 실습3
+SELECT TO_CHAR(hiredate, 'YYYY') AS HIRE_DATE, deptno, COUNT(empno) AS CNT
+FROM emp
+GROUP BY deptno, TO_CHAR(hiredate, 'YYYY')
+ORDER BY TO_CHAR(hiredate, 'YYYY') DESC;
