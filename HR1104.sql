@@ -147,3 +147,41 @@ ORDER BY department_id ASC;
 -- 동일 직업 사원 수 조회
 SELECT job_id AS JOB, COUNT(employee_id)
 FROM employees GROUP BY job_id;
+
+--------------------------------------------------------------------------------------------------------------------
+
+-- Join 실습
+-- 자신의 담당 매니저의 고용일보다 빠른 입사자를 찾아 / hire_date, last_name, manager_id 출력
+-- EMPLOYEES 셀프조인 -> 37행
+SELECT E1.last_name, E1.hire_date AS 내입사일, E1.manager_id, E2.hire_date AS 매니저입사일
+FROM employees E1 INNER JOIN employees E2
+ON E1.manager_id = E2.employee_id AND E1.hire_date < E2.hire_date;
+
+-- 도시 이름이 T로 시작하는 지역에 사는 사원의 사번, last_name, 부서번호
+-- EMPLOYEES. DEMARTMENT_ID + DEMPARTMENTS.DEPARTMENT_ID 후 DEMPARTMENTS.LOCATION_ID + LOCATIONS.LOCATION_ID -> 2행
+SELECT E.employee_id, E.last_name, E.department_id
+FROM EMPLOYEES E
+LEFT OUTER JOIN DEPARTMENTS D ON E.department_id = D.department_id
+LEFT OUTER JOIN LOCATIONS L ON D.location_id = L.location_id;
+
+
+
+
+-- 위치 id가 1700인 동일한 사원들의 employee_id, last_name, department_id, salary 조회
+-- EMPLOYEES + DEMPARTMENTS -> 18행
+
+-- department_name, location_id, 각 부서별 사원수, 평균연봉 조회
+-- EMPLOYEES + DEMPARTMENTS -> 11행
+
+
+-- EXECUTIVE 부서에 근무하는 전사원 department_id, last_name, job_id 조회
+-- EMPLOYEES + DEMPARTMENTS
+
+-- 기존 직업을 유지하고있는 사원의 사번, job_id 조회
+-- EMPLOYEES + JOB_HISTORY
+
+-- 각 사원 별 소속부서에서 자신보다 나중에 고용되었으나, 보다많은 연봉을 받는 사원이 있는 사원의 last_name을 조회
+-- EMPLOYEES 셀프조인
+
+
+--------------------------------------------------------------------------------------------------------------------
