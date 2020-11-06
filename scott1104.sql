@@ -382,3 +382,32 @@ SELECT empno, ename, job, sal, CASE
                                     WHEN comm > 0 THEN '수당 : ' || comm
                                 END AS COMM_TEXT
 FROM emp;
+
+-------------------------------------------------------------------------------------------
+
+-- 실습 1
+SELECT empno, ename, sal, TRUNC((sal/21.5), 2) AS DAY_PAY, ROUND(((Sal/21.5)/8), 1) AS TIME_PAY
+FROM emp;
+
+-- 실습 2
+SELECT empno, ename, TO_DATE(hiredate, 'YYYY/MM/DD') AS HIREDATE, TO_DATE(NEXT_DAY(ADD_MONTHS(hiredate, 3), '월요일')) AS R_JOB,
+        CASE
+           WHEN comm IS NULL THEN 'N/A'
+           WHEN comm >= 0 THEN TO_CHAR(comm)
+           END AS COMM
+FROM emp;
+
+ NEXT_DAY(SYSDATE, '월요일')
+
+-- 실습 3
+SELECT empno, ename, mgr, 
+    CASE
+        WHEN mgr IS NULL THEN '0000'
+        WHEN SUBSTR(mgr, 1, 2) = 75 THEN '5555'
+        WHEN SUBSTR(mgr, 1, 2) = 76 THEN '6666'
+        WHEN SUBSTR(mgr, 1, 2) = 77 THEN '7777'
+        WHEN SUBSTR(mgr, 1, 2) = 78 THEN '8888'
+     ELSE TO_CHAR(mgr)
+     END AS CHG_MGR
+FROM emp;
+

@@ -89,3 +89,22 @@ WHERE department_id IN(60, 70, 80, 90);
 SELECT employee_id, first_name ||' '|| last_name, hire_date, job_id
 FROM employees
 WHERE job_id IN('AD_PRES', 'PU_CLERK');
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+-- ½Ç½À
+
+SELECT LAST_NAME, SALARY, 
+    CASE
+        WHEN SALARY BETWEEN 0 AND 1999 THEN 0
+        WHEN SALARY BETWEEN 2000 AND 3999 THEN 0.09
+        WHEN SALARY BETWEEN 4000 AND 5999 THEN 0.2
+        WHEN SALARY BETWEEN 6000 AND 7999 THEN 0.3
+        WHEN SALARY BETWEEN 8000 AND 9999 THEN 0.4
+        WHEN SALARY BETWEEN 10000 AND 11999 THEN 0.42
+        WHEN SALARY BETWEEN 12000 AND 13999 THEN 0.44
+        WHEN SALARY >= 14000 THEN 0.45
+        END AS TAX_RATE
+        
+FROM employees
+WHERE department_id IN(80);
