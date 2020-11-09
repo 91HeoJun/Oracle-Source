@@ -1,0 +1,24 @@
+
+CREATE TABLE dept_tcl AS SELECT * FROM dept;
+
+INSERT INTO dept_tcl VALUES(50, 'DATABASC', 'SEOUL');
+
+commit;
+
+SELECT * FROM DEPT_TCL;
+
+ROLLBACK;
+
+-- 하나의 트랜잭션 생성
+INSERT INTO dept_tcl VALUES(60, 'NETWORK', 'BUSAN');
+
+UPDATE dept_tcl
+SET LOC = 'SEOUL'
+WHERE deptno = 40;
+
+DELETE FROM dept_tcl
+WHERE dname = 'RESERACH';
+
+SELECT * FROM DEPT_TCL;
+
+COMMIT;
