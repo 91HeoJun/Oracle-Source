@@ -448,3 +448,7 @@ SELECT TO_CHAR(hiredate, 'YYYY') AS HIRE_DATE, deptno, COUNT(empno) AS CNT
 FROM emp
 GROUP BY deptno, TO_CHAR(hiredate, 'YYYY')
 ORDER BY TO_CHAR(hiredate, 'YYYY') DESC;
+
+
+
+
