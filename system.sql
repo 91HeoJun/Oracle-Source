@@ -22,7 +22,7 @@ GRANT CREATE PUBLIC SYNONYM TO SCOTT;
 -- 새로운 사용자 생성 (= 새로운 스키마(데이터베이스) 생성)
 CREATE USER TEST IDENTIFIED BY 12345;
 
--- 접속 권한 부여
+-- 접속 권한 부여(개별권한 부여)
 GRANT CREATE SESSION TO TEST;
 
 -- 여러 작업 권한을 가지고 있는 롤 부여
