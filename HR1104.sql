@@ -223,3 +223,21 @@ SELECT first_name, last_name
 FROM employees E1
 WHERE E1.employee_id NOT IN (SELECT DISTINCT manager_id FROM employees E2 WHERE E1.employee_id = E2.manager_id);
 
+--------------------------------------------------------------------------------------------------------------------
+
+-- 인덱스 확인
+CREATE TABLE INDEXTBL AS
+SELECT DISTINCT first_name, last_name, hire_date
+FROM employees;
+
+SELECT * FROM INDEXTBL WHERE first_name = 'Jack';
+
+-- 데이터베이스에서 검색의 향상 떄문에 INDEX 사용
+-- 인덱스 사용 여부에 따라 테이블 검색 방식을 TABLE FULL SCAN / INDEX SCAN으로 구분
+
+-- 인덱스 생성
+CREATE INDEX IDX_INDEXTBL_FIRSTNAME ON INDEXTBL(first_name);
+SELECT * FROM INDEXTBL WHERE first_name = 'Jack';
+
+-- 인덱스 삭제
+DROP INDEX IDX_INDEXTBL_FIRSTNAME;
